@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/design_default_color_primary"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:paddingTop="40dp"
+    android:paddingLeft="20dp"
+    android:paddingBottom="20dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#fff"
+        android:text="Hello"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guest"
+        android:textSize="24dp"
+        android:textColor="#fff"
+        android:id="@+id/text_view_header_name"
+        android:textStyle="bold"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="demo@email.com"
+        android:id="@+id/text_view_header_email"
+        android:textColor="#fff"/>
+
+</LinearLayout>

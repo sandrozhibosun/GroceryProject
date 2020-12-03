@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ProductDetailActivity"
+    android:orientation="vertical"
+    android:background="@drawable/wellbg"
+    android:weightSum="2">
+    <include layout="@layout/app_bar" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/detail_image_view"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/detail_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@color/purple_200"
+            android:text="Add"
+            android:textSize="20dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/plus_and_minus"
+            android:layout_width="121dp"
+            android:layout_height="51dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.982"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.926"
+            android:visibility="invisible">
+
+            <Button
+                android:id="@+id/button_plus"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:layout_marginBottom="4dp"
+
+                android:gravity="center"
+                android:text="+" />
+
+            <TextView
+                android:id="@+id/text_product_count"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:text="1"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/button_minus"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+
+                android:layout_marginEnd="240dp"
+                android:layout_marginBottom="72dp"
+                android:text="-" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

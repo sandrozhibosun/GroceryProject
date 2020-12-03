@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/cart_action"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        android:title="back to home"
+        app:showAsAction="ifRoom"
+        android:visible="true"
+        />
+    <item
+        android:id="@+id/Login_action"
+        android:icon="@drawable/ic_baseline_login_24"
+        android:title="Login"
+        android:visible="true"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/Signup_action"
+        android:icon="@drawable/ic_baseline_how_to_reg_24"
+        android:title="Sign up"
+        android:visible="true"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/UserName"
+        android:title="Guest"
+        android:visible="true"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/Logout_action"
+        android:title="Log out"
+        android:visible="true"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_settings"
+        app:showAsAction="never"
+        android:title="Settings">
+    </item>
+
+</menu>

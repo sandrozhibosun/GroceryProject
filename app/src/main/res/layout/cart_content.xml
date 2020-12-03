@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CartActivity"
+    android:background="@drawable/wellbg"
+
+    android:orientation="vertical">
+    <include layout="@layout/app_bar" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/cart_recycler_view"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:id="@+id/checkTotalLayout">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="Sub Toatal:"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="Discount"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="Toatal:"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:layout_alignParentEnd="true">
+            <TextView
+                android:id="@+id/sub_total_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="200"/>
+            <TextView
+                android:id="@+id/discount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="-20"/>
+            <TextView
+                android:id="@+id/total_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25dp"
+                android:text="180"/>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/checkout_button"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_primary_style"
+        android:text="Check out"/>
+    <Button
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/goshopping_button"
+        android:layout_margin="10dp"
+        android:background="@drawable/button_primary_style"
+        android:text="cart is empty, go shopping?"/>
+</RelativeLayout>
+
+
+</LinearLayout>
