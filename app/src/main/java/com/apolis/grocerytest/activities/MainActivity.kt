@@ -9,10 +9,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.GridLayout
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.MenuItemCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,6 +28,7 @@ import com.apolis.grocerytest.R
 import com.apolis.grocerytest.adapters.AdapterCategory
 import com.apolis.grocerytest.adapters.AdapterSlider
 import com.apolis.grocerytest.app.EndPoint
+import com.apolis.grocerytest.database.DBhelper
 import com.apolis.grocerytest.helper.SessionManager
 import com.apolis.grocerytest.models.CategoryResponse
 import com.google.android.material.navigation.NavigationView
@@ -33,6 +36,7 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.main_content.*
+import kotlinx.android.synthetic.main.menu_cart.view.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -42,11 +46,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var drawLayout: DrawerLayout
     private lateinit var navView: NavigationView
     private lateinit var sessionManager: SessionManager
+    private var textViewCartCount: TextView? = null
+    lateinit var dBhelper: DBhelper
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dBhelper = DBhelper(this)
+
 
         sessionManager = SessionManager(this)
         Log.d("abc", "session main check: ${sessionManager.isLoggedIn()}")
@@ -62,6 +71,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     private fun init() {
+        updateUi()
+
         setupToolbar()
         getData()
         setupNavi()
@@ -91,56 +102,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        toolbar.setNavigationIcon(R.drawable.ic_baseline_menu_24)
-//        toolbar.setNavigationOnClickListener() {
-//
-//            toolbar.inflateMenu(R.menu.mainmenu)
-//
-//        }
-//        if(sessionManager.isLoggedIn()){
-//            toolbar.menu.findItem(R.id.Login_action).isVisible=false
-//            toolbar.menu.findItem(R.id.Signup_action).isVisible=false
-//            toolbar.menu.findItem(R.id.Logout_action).isVisible=true
-//            toolbar.menu.findItem(R.id.UserName).title=sessionManager.getUserName()
-//        }else{
-//            toolbar.menu.findItem(R.id.Login_action).isVisible=true
-//            toolbar.menu.findItem(R.id.Signup_action).isVisible=true
-//            toolbar.menu.findItem(R.id.Logout_action).isVisible=false
-//            toolbar.menu.findItem(R.id.UserName).title="Guest"
-//        }
-//        toolbar.setOnMenuItemClickListener() {
-//
-//            when (it.itemId) {
-//                R.id.back_action -> {
-//                    Log.d("abc", "back")
-//                    finish()
-//                    true
-//                }
-//                R.id.Login_action -> {
-//                    Log.d("abc", "login")
-//                    var intent =Intent(this,LoginActivity::class.java)
-//                    startActivity(intent)
-//
-//                    true
-//                }
-//                R.id.Signup_action -> {
-//                    Log.d("abc", "sign up")
-//                    var intent =Intent(this,RegisterActivity::class.java)
-//                    startActivity(intent)
-//
-//                    true
-//                }
-//                R.id.Logout_action->{
-//                    sessionManager.logout()
-//                    finish()
-//                    true
-//                }
-//                else -> {
-//                    Log.d("abc", "can't recon")
-//                    super.onOptionsItemSelected(it)
-//                }
-//            }
-//        }
+
     }
 
 
@@ -181,13 +143,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             menu?.findItem(R.id.item_order_history)?.isVisible=false
 
         }
+        //cart
+
+
+
         return true
+    }
+    private fun updateUi(){
+        if(dBhelper.readProduct().size==0)
+        {
+            textViewCartCount?.visibility=View.GONE
+        }
+        else{
+            textViewCartCount?.visibility=View.VISIBLE
+            textViewCartCount?.text=dBhelper.readProduct().size.toString()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.mainmenu, menu)
-        return true
+        var item =menu?.findItem(R.id.cart_action)
+        MenuItemCompat.setActionView(item,R.layout.menu_cart)
+        var view=MenuItemCompat.getActionView(item)
+        textViewCartCount= view.text_view_cart_count
+        view.setOnClickListener(){
+            var Intent = Intent(this, CartActivity::class.java)
+            startActivity(Intent)
+        }
+        updateUi()
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

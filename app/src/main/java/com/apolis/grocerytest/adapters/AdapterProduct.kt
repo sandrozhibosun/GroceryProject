@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.apolis.grocerytest.R
 import com.apolis.grocerytest.activities.CartActivity
@@ -53,6 +54,7 @@ class AdapterProduct(var mContext: Context, var mList:ArrayList<Product> = Array
                 itemView.plus_and_minus.visibility = View.VISIBLE
 //                    var Intent = Intent(mContext, CartActivity::class.java)
 //                    mContext.startActivity(Intent)
+                broadcastItem()
             }
             itemView.text_product_count.text = "1"
             itemView.button_plus.setOnClickListener() {
@@ -64,6 +66,8 @@ class AdapterProduct(var mContext: Context, var mList:ArrayList<Product> = Array
                 dBhelper.productPlus(product._id)
                 itemView.text_product_count.text =
                     dBhelper.getProductInCartById(product._id)!!.inCart.toString()
+
+                broadcastItem()
 
 
             }
@@ -82,6 +86,7 @@ class AdapterProduct(var mContext: Context, var mList:ArrayList<Product> = Array
                     itemView.add_button.visibility = View.VISIBLE
                     itemView.plus_and_minus.visibility = View.GONE
                 }
+                broadcastItem()
             }
             if (productInCart == null) {
                 itemView.add_button.visibility = View.VISIBLE
@@ -131,6 +136,14 @@ class AdapterProduct(var mContext: Context, var mList:ArrayList<Product> = Array
     fun setData(productList: ArrayList<Product>) {
         mList = productList
         notifyDataSetChanged()
+    }
+    fun broadcastItem(){
+
+        var intent=Intent("Alert_Change")
+
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent)
+
+
     }
 
 
