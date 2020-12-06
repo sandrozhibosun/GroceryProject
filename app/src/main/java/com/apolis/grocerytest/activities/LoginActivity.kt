@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.MenuItemCompat
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.apolis.grocerytest.R
 import com.apolis.grocerytest.app.EndPoint
+import com.apolis.grocerytest.database.DBhelper
 import com.apolis.grocerytest.helper.SessionManager
 import com.apolis.grocerytest.models.CategoryResponse
 import com.apolis.grocerytest.models.LoginResponse
@@ -20,19 +24,27 @@ import com.apolis.grocerytest.models.User
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.app_bar.*
+import kotlinx.android.synthetic.main.menu_cart.view.*
 import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
+    lateinit var dBhelper: DBhelper
+    private var textViewCartCount: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        dBhelper=DBhelper(this)
 
+        init()
+    }
+    override fun onResume() {
+        super.onResume()
         init()
     }
 
     private fun init() {
         setupToolbar()
-
+        updateUi()
         login.setOnClickListener {
             Log.d("abc", "clicked login")
 
@@ -99,10 +111,29 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    private fun updateUi() {
+        if (dBhelper.readProduct().size == 0) {
+            textViewCartCount?.visibility = View.GONE
+        } else {
+            textViewCartCount?.visibility = View.VISIBLE
+            textViewCartCount?.text = dBhelper.readProduct().size.toString()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.mainmenu, menu)
-        return true
+        var item = menu?.findItem(R.id.cart_action)
+        MenuItemCompat.setActionView(item, R.layout.menu_cart)
+        var view = MenuItemCompat.getActionView(item)
+        textViewCartCount = view.text_view_cart_count
+        view.setOnClickListener() {
+            var Intent = Intent(this, CartActivity::class.java)
+            startActivity(Intent)
+        }
+        updateUi()
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

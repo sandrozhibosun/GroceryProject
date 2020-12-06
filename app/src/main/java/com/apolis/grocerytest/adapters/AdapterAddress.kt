@@ -90,12 +90,8 @@ class AdapterAddress(var mContext: Context, var mList: ArrayList<Address> = Arra
         notifyDataSetChanged()
     }
     fun broadcastItem(){
-
         var intent=Intent("Alert_Set_Address")
-
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent)
-
-
     }
 
 }

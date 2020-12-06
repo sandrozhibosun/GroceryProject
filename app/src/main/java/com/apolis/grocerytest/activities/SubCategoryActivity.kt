@@ -51,8 +51,6 @@ class SubCategoryActivity : AppCompatActivity() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 when(intent?.action){
                     "Alert_Change"->{
-
-
                         updateUi()
                     }
                 }
@@ -65,6 +63,11 @@ class SubCategoryActivity : AppCompatActivity() {
         init()
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateUi()
+
+    }
 
 
 

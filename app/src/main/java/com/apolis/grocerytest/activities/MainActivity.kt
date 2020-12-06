@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var dBhelper: DBhelper
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -66,8 +65,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         setupNavi()
+        updateUi()
     }
-
 
 
     private fun init() {
@@ -76,9 +75,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupToolbar()
         getData()
         setupNavi()
-        adapterSlider=AdapterSlider(this)
-        slider_recycler_view.adapter=adapterSlider
-        slider_recycler_view.layoutManager=
+        adapterSlider = AdapterSlider(this)
+        slider_recycler_view.adapter = adapterSlider
+        slider_recycler_view.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         adapterCategory = AdapterCategory(this)
@@ -89,8 +88,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
     }
-
-
 
 
     private fun setupToolbar() {
@@ -124,50 +121,48 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             menu?.findItem(R.id.Logout_action)?.setVisible(true)
             menu?.findItem(R.id.UserName)?.setTitle("Welcome, ${sessionManager.getUserName()}")
             //nav
-            menu?.findItem(R.id.item_Login)?.isVisible=false
-            menu?.findItem(R.id.item_register)?.isVisible=false
-            menu?.findItem(R.id.item_Logout)?.isVisible=true
-            menu?.findItem(R.id.item_address)?.isVisible=true
-            menu?.findItem(R.id.item_order_history)?.isVisible=true
+            menu?.findItem(R.id.item_Login)?.isVisible = false
+            menu?.findItem(R.id.item_register)?.isVisible = false
+            menu?.findItem(R.id.item_Logout)?.isVisible = true
+            menu?.findItem(R.id.item_address)?.isVisible = true
+            menu?.findItem(R.id.item_order_history)?.isVisible = true
 
         } else {
-                        menu?.findItem(R.id.Login_action)?.setVisible(true)
+            menu?.findItem(R.id.Login_action)?.setVisible(true)
             menu?.findItem(R.id.Signup_action)?.setVisible(true)
             menu?.findItem(R.id.Logout_action)?.setVisible(false)
             menu?.findItem(R.id.UserName)?.setTitle("Guest")
             //nav
-            menu?.findItem(R.id.item_Login)?.isVisible=true
-            menu?.findItem(R.id.item_register)?.isVisible=true
-            menu?.findItem(R.id.item_Logout)?.isVisible=false
-            menu?.findItem(R.id.item_address)?.isVisible=false
-            menu?.findItem(R.id.item_order_history)?.isVisible=false
+            menu?.findItem(R.id.item_Login)?.isVisible = true
+            menu?.findItem(R.id.item_register)?.isVisible = true
+            menu?.findItem(R.id.item_Logout)?.isVisible = false
+            menu?.findItem(R.id.item_address)?.isVisible = false
+            menu?.findItem(R.id.item_order_history)?.isVisible = false
 
         }
         //cart
 
 
-
         return true
     }
-    private fun updateUi(){
-        if(dBhelper.readProduct().size==0)
-        {
-            textViewCartCount?.visibility=View.GONE
-        }
-        else{
-            textViewCartCount?.visibility=View.VISIBLE
-            textViewCartCount?.text=dBhelper.readProduct().size.toString()
+
+    private fun updateUi() {
+        if (dBhelper.readProduct().size == 0) {
+            textViewCartCount?.visibility = View.GONE
+        } else {
+            textViewCartCount?.visibility = View.VISIBLE
+            textViewCartCount?.text = dBhelper.readProduct().size.toString()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.mainmenu, menu)
-        var item =menu?.findItem(R.id.cart_action)
-        MenuItemCompat.setActionView(item,R.layout.menu_cart)
-        var view=MenuItemCompat.getActionView(item)
-        textViewCartCount= view.text_view_cart_count
-        view.setOnClickListener(){
+        var item = menu?.findItem(R.id.cart_action)
+        MenuItemCompat.setActionView(item, R.layout.menu_cart)
+        var view = MenuItemCompat.getActionView(item)
+        textViewCartCount = view.text_view_cart_count
+        view.setOnClickListener() {
             var Intent = Intent(this, CartActivity::class.java)
             startActivity(Intent)
         }
@@ -243,26 +238,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     }
+
     private fun setupNavi() {
         drawLayout = drawer_layout
         navView = nav_view
         var nav_menu = navView.menu
         var headView = navView.getHeaderView(0)
         if (sessionManager.isLoggedIn()) {
-            nav_menu.findItem(R.id.item_Login).isVisible=false
-            nav_menu.findItem(R.id.item_register).isVisible=false
-            nav_menu.findItem(R.id.item_Logout).isVisible=true
-            nav_menu.findItem(R.id.item_address).isVisible=true
-            nav_menu.findItem(R.id.item_order_history).isVisible=true
+            nav_menu.findItem(R.id.item_Login).isVisible = false
+            nav_menu.findItem(R.id.item_register).isVisible = false
+            nav_menu.findItem(R.id.item_Logout).isVisible = true
+            nav_menu.findItem(R.id.item_address).isVisible = true
+            nav_menu.findItem(R.id.item_order_history).isVisible = true
             headView.text_view_header_name.text = sessionManager.getUserName()
             headView.text_view_header_email.isVisible = true
             headView.text_view_header_email.text = sessionManager.getUserEmail()
         } else {
-            nav_menu.findItem(R.id.item_Login).isVisible=true
-            nav_menu.findItem(R.id.item_register).isVisible=true
-            nav_menu.findItem(R.id.item_Logout).isVisible=false
-            nav_menu.findItem(R.id.item_address).isVisible=false
-            nav_menu.findItem(R.id.item_order_history).isVisible=false
+            nav_menu.findItem(R.id.item_Login).isVisible = true
+            nav_menu.findItem(R.id.item_register).isVisible = true
+            nav_menu.findItem(R.id.item_Logout).isVisible = false
+            nav_menu.findItem(R.id.item_address).isVisible = false
+            nav_menu.findItem(R.id.item_order_history).isVisible = false
             headView.text_view_header_name.text = "Guest"
             headView.text_view_header_email.isVisible = false
 
@@ -297,19 +293,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 sessionManager.logout()
 
             }
-            R.id.item_order_history->{
-                startActivity(Intent(this,OrderHistoryActivity::class.java))
+            R.id.item_order_history -> {
+                startActivity(Intent(this, OrderHistoryActivity::class.java))
 
             }
-            R.id.item_address->{
-                startActivity(Intent(this,AddressListActivity::class.java))
+            R.id.item_address -> {
+                startActivity(Intent(this, AddressListActivity::class.java))
             }
         }
 
 
         drawLayout.closeDrawer(GravityCompat.START)
 
-       
+
         return true
     }
 

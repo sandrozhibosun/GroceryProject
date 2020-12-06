@@ -82,43 +82,55 @@ class ProductDetailActivity : AppCompatActivity() {
         updateUi()
         setupToolbar()
         var productInCart = dBhelper.getProductInCartById(product!!._id)
+        add_button.setOnClickListener {
+            dBhelper = DBhelper(this)
+            dBhelper.addToCart(product!!)
+            add_button.visibility = View.GONE
+            plus_and_minus.visibility = View.VISIBLE
+            var Intent = Intent(this, CartActivity::class.java)
+            broadcastItem()
+            startActivity(Intent)
+
+        }
+        button_plus.setOnClickListener() {
+            if(dBhelper.getProductInCartById(productInCart!!._id)==null)
+            {
+                return@setOnClickListener
+            }
+            dBhelper.productPlus(productInCart!!._id)
+            text_product_count.text = dBhelper.getProductInCartById(productInCart._id)!!.inCart.toString()
+            updateUi()
+
+        }
+        button_minus.setOnClickListener {
+            if(dBhelper.getProductInCartById(productInCart!!._id)==null)
+            {
+                return@setOnClickListener
+            }
+
+            if (dBhelper.getProductInCartById(productInCart!!._id)!!.inCart > 1) {
+                dBhelper.productminus(productInCart._id)
+                text_product_count.text =
+                    dBhelper.getProductInCartById(productInCart._id)!!.inCart.toString()
+            } else {
+                dBhelper.productminus(productInCart._id)
+//                    onResume()
+                add_button.visibility = View.VISIBLE
+                plus_and_minus.visibility = View.GONE
+
+            }
+            broadcastItem()
+            updateUi()
+
+        }
         if (dBhelper.getProductInCartById(product!!._id) == null) {
             add_button.visibility = View.VISIBLE
             plus_and_minus.visibility = View.GONE
-            add_button.setOnClickListener {
-                dBhelper = DBhelper(this)
-                dBhelper.addToCart(product!!)
-                add_button.visibility = View.GONE
-                plus_and_minus.visibility = View.VISIBLE
-                var Intent = Intent(this, CartActivity::class.java)
-                startActivity(Intent)
-            }
+
         } else {
             add_button.visibility = View.GONE
             plus_and_minus.visibility = View.VISIBLE
             text_product_count.text = productInCart!!.inCart.toString()
-            button_plus.setOnClickListener() {
-                dBhelper.productPlus(productInCart._id)
-                text_product_count.text = dBhelper.getProductInCartById(productInCart._id)!!.inCart.toString()
-                updateUi()
-
-            }
-            button_minus.setOnClickListener {
-
-                if (dBhelper.getProductInCartById(productInCart._id)!!.inCart > 1) {
-                    dBhelper.productminus(productInCart._id)
-                    text_product_count.text =
-                        dBhelper.getProductInCartById(productInCart._id)!!.inCart.toString()
-                } else {
-                    dBhelper.productminus(productInCart._id)
-//                    onResume()
-                    add_button.visibility = View.VISIBLE
-                    plus_and_minus.visibility = View.GONE
-
-                }
-                updateUi()
-
-            }
 
         }
 
@@ -223,6 +235,10 @@ class ProductDetailActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+    fun broadcastItem(){
+        var intent=Intent("Alert_Set_Address")
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
     }
 
 

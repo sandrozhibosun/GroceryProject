@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
+import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apolis.grocerytest.R
 import com.apolis.grocerytest.adapters.AdapterPayment
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_payment.sub_total_text
 import kotlinx.android.synthetic.main.activity_payment.total_text
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.cart_content.*
+import kotlinx.android.synthetic.main.menu_cart.view.*
 
 
 class PaymentActivity : AppCompatActivity(),View.OnClickListener {
@@ -31,6 +34,8 @@ class PaymentActivity : AppCompatActivity(),View.OnClickListener {
     lateinit var dBhelper: DBhelper
     lateinit var sessionManager: SessionManager
     lateinit var adapterPayment:AdapterPayment
+
+    private var textViewCartCount: TextView? = null
     var subtotal=0.00
     var total=0.00
     var discount=0.00
@@ -53,7 +58,7 @@ class PaymentActivity : AppCompatActivity(),View.OnClickListener {
     private fun init(){
         address = sessionManager.getDefaultAddress()
         setupToolbar()
-
+        updateUi()
         
         street_name_text_view.text=address.streetName
         city_text_view.text=address.city
@@ -137,10 +142,29 @@ class PaymentActivity : AppCompatActivity(),View.OnClickListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    private fun updateUi() {
+        if (dBhelper.readProduct().size == 0) {
+            textViewCartCount?.visibility = View.GONE
+        } else {
+            textViewCartCount?.visibility = View.VISIBLE
+            textViewCartCount?.text = dBhelper.readProduct().size.toString()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.mainmenu, menu)
-        return true
+        var item = menu?.findItem(R.id.cart_action)
+        MenuItemCompat.setActionView(item, R.layout.menu_cart)
+        var view = MenuItemCompat.getActionView(item)
+        textViewCartCount = view.text_view_cart_count
+        view.setOnClickListener() {
+            var Intent = Intent(this, CartActivity::class.java)
+            startActivity(Intent)
+        }
+        updateUi()
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

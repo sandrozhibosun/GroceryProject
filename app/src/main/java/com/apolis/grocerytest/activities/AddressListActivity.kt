@@ -10,7 +10,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.MenuItemCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
@@ -21,6 +23,7 @@ import com.apolis.grocerytest.R
 import com.apolis.grocerytest.adapters.AdapterAddress
 import com.apolis.grocerytest.adapters.AdapterProduct
 import com.apolis.grocerytest.app.EndPoint
+import com.apolis.grocerytest.database.DBhelper
 import com.apolis.grocerytest.helper.SessionManager
 import com.apolis.grocerytest.models.AddressListResponse
 import com.apolis.grocerytest.models.ProductSub
@@ -28,17 +31,21 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_address_list.*
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.fragment_sub_pro_category.view.*
+import kotlinx.android.synthetic.main.menu_cart.view.*
 import kotlinx.android.synthetic.main.row_adapter_address.*
 
 class AddressListActivity : AppCompatActivity(),View.OnClickListener {
 
     lateinit var adapterAddress: AdapterAddress
     lateinit var sessionManager: SessionManager
+    lateinit var dBhelper: DBhelper
+    private var textViewCartCount: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address_list)
         sessionManager= SessionManager(this)
+        dBhelper=DBhelper(this)
         init()
         val broadcastReceiver=object: BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -63,7 +70,7 @@ class AddressListActivity : AppCompatActivity(),View.OnClickListener {
 
     private fun init(){
         setupToolbar()
-
+        updateUi()
         getData()
         adapterAddress= AdapterAddress(this)
         address_list_recycler_view.adapter=adapterAddress
@@ -110,10 +117,29 @@ class AddressListActivity : AppCompatActivity(),View.OnClickListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    private fun updateUi() {
+        if (dBhelper.readProduct().size == 0) {
+            textViewCartCount?.visibility = View.GONE
+        } else {
+            textViewCartCount?.visibility = View.VISIBLE
+            textViewCartCount?.text = dBhelper.readProduct().size.toString()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.mainmenu, menu)
-        return true
+        var item = menu?.findItem(R.id.cart_action)
+        MenuItemCompat.setActionView(item, R.layout.menu_cart)
+        var view = MenuItemCompat.getActionView(item)
+        textViewCartCount = view.text_view_cart_count
+        view.setOnClickListener() {
+            var Intent = Intent(this, CartActivity::class.java)
+            startActivity(Intent)
+        }
+        updateUi()
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

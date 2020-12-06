@@ -96,25 +96,6 @@ class AdapterProduct(var mContext: Context, var mList:ArrayList<Product> = Array
                 itemView.add_button.visibility = View.GONE
                 itemView.plus_and_minus.visibility = View.VISIBLE
                 itemView.text_product_count.text = productInCart.inCart.toString()
-//                itemView.button_plus.setOnClickListener() {
-//                    dBhelper.productPlus(productInCart._id)
-//                    itemView.text_product_count.text =
-//                        dBhelper.getProductInCartById(productInCart._id)!!.inCart.toString()
-//
-//
-//                }
-//                itemView.button_minus.setOnClickListener {
-//
-//                    if (dBhelper.getProductInCartById(productInCart._id)!!.inCart > 1) {
-//                        dBhelper.productminus(productInCart._id)
-//                        itemView.text_product_count.text =
-//                            dBhelper.getProductInCartById(productInCart._id)!!.inCart.toString()
-//                    } else {
-//                        dBhelper.productminus(productInCart._id)
-//                        itemView.add_button.visibility = View.VISIBLE
-//                        itemView.plus_and_minus.visibility = View.GONE
-//                    }
-//                }
 
             }
         }

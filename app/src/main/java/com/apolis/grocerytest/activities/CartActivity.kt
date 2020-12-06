@@ -11,9 +11,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Adapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.MenuItemCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -29,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar.*
 import kotlinx.android.synthetic.main.cart_content.*
+import kotlinx.android.synthetic.main.menu_cart.view.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 
 class CartActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener {
@@ -37,12 +40,16 @@ class CartActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     lateinit var sessionManager:SessionManager
     private lateinit var drawLayout: DrawerLayout
     private lateinit var navView: NavigationView
+    lateinit var dBhelper: DBhelper
+    private var textViewCartCount: TextView? = null
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
+        dBhelper=DBhelper(this)
+
 
         sessionManager=SessionManager(this)
         init()
@@ -52,8 +59,8 @@ class CartActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
                 when(intent?.action){
                     "Alert_Change"->{
 
-
                         subTotal()
+                        updateUi()
                     }
                 }
             }
@@ -68,7 +75,7 @@ class CartActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
     }
 
     private fun init(){
-
+        updateUi()
         setupToolbar()
 //        setupNavi()
         adapterCart= AdapterCart(this)
@@ -223,10 +230,29 @@ class CartActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    private fun updateUi() {
+        if (dBhelper.readProduct().size == 0) {
+            textViewCartCount?.visibility = View.GONE
+        } else {
+            textViewCartCount?.visibility = View.VISIBLE
+            textViewCartCount?.text = dBhelper.readProduct().size.toString()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.mainmenu, menu)
-        return true
+        var item = menu?.findItem(R.id.cart_action)
+        MenuItemCompat.setActionView(item, R.layout.menu_cart)
+        var view = MenuItemCompat.getActionView(item)
+        textViewCartCount = view.text_view_cart_count
+        view.setOnClickListener() {
+            var Intent = Intent(this, CartActivity::class.java)
+            startActivity(Intent)
+        }
+        updateUi()
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
