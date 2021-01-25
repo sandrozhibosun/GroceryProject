@@ -12,6 +12,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+
 import com.apolis.grocerytest.R
 import com.apolis.grocerytest.adapters.AdapterProduct
 import com.apolis.grocerytest.app.EndPoint
@@ -99,7 +100,8 @@ class SubProCategoryFragment : Fragment() {
 //        requestQueue.add(request)
 
         var requestQueue= Volley.newRequestQueue(activity)
-        var request=StringRequest(Request.Method.GET,EndPoint.getProductBySubId(subCategory?.subId!!),
+        var request= StringRequest(
+            Request.Method.GET,EndPoint.getProductBySubId(subCategory?.subId!!),
         Response.Listener {
 
             var gson=Gson()

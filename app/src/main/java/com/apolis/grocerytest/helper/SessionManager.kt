@@ -42,16 +42,7 @@ class SessionManager(var mContext: Context){
     }
 
     fun login(user: User): Boolean{
-//        var saveEmail = sharedPreferences.getString(KEY_EMAIL, null)
-//        var savePassword = sharedPreferences.getString(KEY_PASSWORD, null)
-//
-//        if(saveEmail.equals(user.email) && savePassword.equals(user.password)){
-//            editor.putBoolean(KEY_IS_LOGGED_IN, true)
-//            editor.commit()
-//            return true
-//        }else{
-//            return false
-//        }
+
         editor.putString(Key_UserId, user.userId)
         editor.putString(KEY_NAME, user.name)
         editor.putString(KEY_EMAIL, user.email)
